@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE-edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OTP and Password Verification Form</title>
+
+    <link rel="stylesheet" href="style.css" />
+
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* Import Google font - Poppins */
+
+      * {
+        margin: 5px;
+        padding: 0px;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f1f1f2;
+        font-family: "Poppins", sans-serif;
+        background-image: url("https://t4.ftcdn.net/jpg/01/23/73/15/240_F_123731572_KMfBEkpbRlfQj1ypdPVwv4W0r27B9hVJ.jpg");
+        background-size: cover;
+      }
+      :where(.container, form, .input-field, header) {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .container {
+        background: #fff;
+        padding: 30px 65px;
+        border-radius: 12px;
+        row-gap: 20px;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+      }
+      .container header {
+        height: 65px;
+        width: 65px;
+        background: #3957d1;
+        color: #fff;
+        font-size: 2.5rem;
+        border-radius: 50%;
+      }
+      .container h4 {
+        font-size: 1.25rem;
+        color: #333;
+        font-weight: 500;
+      }
+
+      .otp-input input,
+      .input-field input {
+        height: 45px;
+        width: 200px;
+        border-radius: 6px;
+        outline: none;
+        font-size: 1.125rem;
+        text-align: center;
+        border: 1px solid #ddd;
+      }
+
+      .otp-input input:focus,
+      .input-field input:focus {
+        box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+      }
+
+      form button {
+        margin-top: 25px;
+        width: 150px;
+        color: #fff;
+        font-size: 1rem;
+        padding: 9px 0;
+        cursor: pointer;
+        border-radius: 5px;
+        background: #537ced;
+        transition: all 0.2s ease;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto;
+      }
+      form button:hover {
+        background: #0e4bf1;
+      }
+
+      .error {
+        color: red;
+        margin-top: 5px;
+        font-size: 0.875rem;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <i class="bx bxs-check-shield"></i>
+      </header>
+      <h4>Enter OTP Code</h4>
+      <form action="<?= base_url('saveForgotpage')?>" method="post">
+        <div class="otp-input">
+          <input
+            type="text"
+            name="otp"
+            maxlength="6"
+            oninput="handleInput(this)"
+          />
+        </div>
+
+        <script>
+          function handleInput(input) {
+            // Remove non-digit characters
+            input.value = input.value.replace(/\D/g, "");
+
+            // Limit to 6 characters
+            if (input.value.length > 6) {
+              input.value = input.value.slice(0, 6);
+            }
+          }
+        </script>
+        <h4>Set Password</h4>
+    <div class="input-field">
+      <input
+        type="password"
+        id="password"
+        placeholder="Password"
+        oninput="validatePassword()"
+        
+      />
+      <p id="passwordError" class="error"></p>
+    </div>
+    <h4>Confirm Password</h4>
+    <div class="input-field">
+      <input
+        type="password"
+        id="confirmPassword"
+        name="confirmPassword"
+        placeholder="Confirm Password"
+        oninput="validatePassword()"
+      />
+      <p id="confirmPasswordError" class="error"></p>
+    </div>
+
+    <div class="input-field">
+      <button type="submit">Submit</button>
+    </div>
+
+    <script>
+      function validatePassword() {
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const passwordError = document.getElementById('passwordError');
+        const confirmPasswordError = document.getElementById('confirmPasswordError');
+
+        const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
+
+        // Your password requirements
+        const minLength = 6;
+        const maxLength = 12;
+        const specialSymbolRegex = /[!@#$%^&*(),.?":{}|<>]/;
+        const numberRegex = /\d/;
+
+        // Validate password length
+        if (password.length < minLength || password.length > maxLength) {
+          passwordError.textContent = `Password must be between ${minLength} and ${maxLength} characters.`;
+        } else {
+          passwordError.textContent = '';
+        }
+
+        // Validate special symbol
+        if (!specialSymbolRegex.test(password)) {
+          passwordError.textContent += ' Password must contain at least one special symbol.';
+        }
+
+        // Validate number
+        if (!numberRegex.test(password)) {
+          passwordError.textContent += ' Password must contain at least one number.';
+        }
+
+        // Validate password match
+        if (password !== confirmPassword) {
+          confirmPasswordError.textContent = 'Passwords do not match.';
+        } else {
+          confirmPasswordError.textContent = '';
+        }
+      }
+    </script>
+      </form>
+    </div>
+  </body>
+</html>
